@@ -4,43 +4,79 @@
   <title>Peace Gang</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>Peace Gang</header>
+<header>🔥 Peace Gang</header>
 <div class="banner"></div>
 
 <div class="container">
-<h2>Join Peace Gang</h2>
+  <h2>Join Peace Gang</h2>
 
-<form action="/apply" method="POST">
-<input name="username" placeholder="Minecraft Username" required>
-<textarea name="reason" placeholder="Why should we trust you?" required></textarea>
-<input type="email" name="email" placeholder="Your Email" required>
+  <form action="/apply" method="POST">
 
-<select name="rank">
+    <input name="username" placeholder="🎮 Minecraft Username" required>
 
-  <!-- ⚔️ PvP Army -->
-  <option value="Recruit">🪖 Recruit</option>
-  <option value="Associate">🔰 Associate</option>
-  <option value="Diamond">💎 Diamond</option>
-  <option value="Crystal">🔮 Crystal</option>
-  <option value="Mastermind">👑 Mastermind</option>
+    <textarea name="reason" placeholder="🧠 Why should we trust you?" required></textarea>
 
-  <!-- 🏗️ Builders -->
-  <option value="Apprentice Builder">🧱 Apprentice Builder</option>
-  <option value="Builder">🏗️ Builder</option>
-  <option value="Architect">📐 Architect</option>
-  <option value="Chief Architect">👷‍♂️ Chief Architect</option>
+    <input type="email" name="email" placeholder="📧 Your Email" required>
 
-  <!-- 💰 Bankers -->
-  <option value="Trainee Banker">💵 Trainee Banker</option>
-  <option value="Banker">💰 Banker</option>
-  <option value="Treasurer">🏦 Treasurer</option>
-  <option value="Financial Master">👑 Financial Master</option>
+    <!-- Division FIRST -->
+    <select name="division" id="division" onchange="updateRanks()">
+      <option value="pvp">⚔️ PvP Army</option>
+      <option value="builder">🏗️ Builders</option>
+      <option value="banker">💰 Bankers</option>
+    </select>
 
-</select>
-<select name="division" id="division" onchange="updateRanks()">
-  <option value="pvp">⚔️ PvP Army</option>
-  <option value="builder">🏗️ Builders</option>
-  <option value="banker">💰 Bankers</option>
-</select>
+    <!-- Rank AUTO -->
+    <select name="rank" id="rank"></select>
+
+    <!-- SUBMIT BUTTON -->
+    <button type="submit">🚀 Join Peace Gang</button>
+
+  </form>
+</div>
+
+<!-- SCRIPT -->
+<script>
+function updateRanks() {
+  const division = document.getElementById("division").value;
+  const rankSelect = document.getElementById("rank");
+
+  rankSelect.innerHTML = "";
+
+  if (division === "pvp") {
+    rankSelect.innerHTML = `
+      <option>🪖 Recruit</option>
+      <option>🔰 Associate</option>
+      <option>💎 Diamond</option>
+      <option>🔮 Crystal</option>
+      <option>👑 Mastermind</option>
+    `;
+  }
+
+  else if (division === "builder") {
+    rankSelect.innerHTML = `
+      <option>🧱 Apprentice Builder</option>
+      <option>🏗️ Builder</option>
+      <option>📐 Architect</option>
+      <option>👷 Chief Architect</option>
+    `;
+  }
+
+  else if (division === "banker") {
+    rankSelect.innerHTML = `
+      <option>💵 Trainee Banker</option>
+      <option>💰 Banker</option>
+      <option>🏦 Treasurer</option>
+      <option>👑 Financial Master</option>
+    `;
+  }
+}
+
+// Load default ranks
+updateRanks();
+</script>
+
+</body>
+</html>
