@@ -1,119 +1,77 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
 const fs = require("fs");
-
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(__dirname));
 
-/* FILES */
-const APPS_FILE = "applications.json";
-const ADMINS_FILE = "admins.json";
+// 🔐 ADMIN LOGIN
+const ADMIN_USER = "Z1ngoGD";
+const ADMIN_PASS = "1234";
 
-if (!fs.existsSync(APPS_FILE)) fs.writeFileSync(APPS_FILE, "[]");
-if (!fs.existsSync(ADMINS_FILE)) {
-  fs.writeFileSync(ADMINS_FILE, JSON.stringify([
-    { username: "Z1ngoGD", password: "1234" }
-  ]));
+// 📂 Ensure file exists
+if (!fs.existsSync("applications.json")) {
+  fs.writeFileSync("applications.json", "[]");
 }
 
-/* EMAIL */
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "z1ng0gd@gmail.com",
-    pass: "your_app_password"
-  }
-});
-
-/* APPLY */
+// 📝 APPLY
 app.post("/apply", (req, res) => {
-  const { username, reason, email, division } = req.body;
-
-  const apps = JSON.parse(fs.readFileSync(APPS_FILE));
+  const apps = JSON.parse(fs.readFileSync("applications.json"));
 
   const newApp = {
-    id: Date.now().toString(),
-    username,
-    reason,
-    email,
-    division,
-    rank: "Not Assigned ❌",
-    status: "pending"
+    id: Date.now(),
+    username: req.body.username,
+    email: req.body.email,
+    reason: req.body.reason,
+    division: req.body.division,
+    status: "pending",
+    rank: "None"
   };
 
   apps.push(newApp);
-  fs.writeFileSync(APPS_FILE, JSON.stringify(apps, null, 2));
 
-  transporter.sendMail({
-    from: "z1ng0gd@gmail.com",
-    to: "z1ng0gd@gmail.com",
-    subject: "New Application",
-    text: `${username} applied for ${division}`
-  });
+  fs.writeFileSync("applications.json", JSON.stringify(apps, null, 2));
 
-  res.send("Application Sent ✅");
+  res.send("Application submitted!");
 });
 
-/* LOGIN */
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  const admins = JSON.parse(fs.readFileSync(ADMINS_FILE));
-
-  const valid = admins.find(
-    a => a.username === username && a.password === password
-  );
-
-  res.json({ success: !!valid });
-});
-
-/* GET APPS */
+// 🔐 GET APPLICATIONS (PROTECTED)
 app.get("/applications", (req, res) => {
   const user = req.headers["admin-user"];
   const pass = req.headers["admin-pass"];
 
-  const admins = JSON.parse(fs.readFileSync(ADMINS_FILE));
+  if (user !== ADMIN_USER || pass !== ADMIN_PASS) {
+    return res.status(403).send("ACCESS DENIED");
+  }
 
-  const valid = admins.find(
-    a => a.username === user && a.password === pass
-  );
-
-  if (!valid) return res.status(403).send("Forbidden");
-
-  res.json(JSON.parse(fs.readFileSync(APPS_FILE)));
+  const data = JSON.parse(fs.readFileSync("applications.json"));
+  res.json(data);
 });
 
-/* UPDATE */
+// 🔐 UPDATE APPLICATION (PROTECTED)
 app.post("/update", (req, res) => {
   const user = req.headers["admin-user"];
   const pass = req.headers["admin-pass"];
 
-  const admins = JSON.parse(fs.readFileSync(ADMINS_FILE));
+  if (user !== ADMIN_USER || pass !== ADMIN_PASS) {
+    return res.status(403).send("ACCESS DENIED");
+  }
 
-  const valid = admins.find(
-    a => a.username === user && a.password === pass
-  );
-
-  if (!valid) return res.status(403).send("Forbidden");
-
-  const { id, status, rank } = req.body;
-
-  let apps = JSON.parse(fs.readFileSync(APPS_FILE));
+  let apps = JSON.parse(fs.readFileSync("applications.json"));
 
   apps = apps.map(app =>
-    app.id === id ? { ...app, status, rank } : app
+    app.id == req.body.id
+      ? { ...app, status: req.body.status, rank: req.body.rank }
+      : app
   );
 
-  fs.writeFileSync(APPS_FILE, JSON.stringify(apps, null, 2));
+  fs.writeFileSync("applications.json", JSON.stringify(apps, null, 2));
 
-  res.send("Updated ✅");
+  res.send("Updated!");
 });
 
-/* START */
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Server running");
 });

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #0b0f2a, black);
+      color: white;
+      font-family: Arial;
+    }
+
+    .card {
+      border: 1px solid #444;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">👑 Admin Panel</h1>
+
+<h2>⚔️ PvP Army</h2>
+<div id="pvp"></div>
+
+<h2>🏗️ Builders</h2>
+<div id="builder"></div>
+
+<h2>💰 Bankers</h2>
+<div id="banker"></div>
+
+<script>
+const user = localStorage.getItem("adminUser");
+const pass = localStorage.getItem("adminPass");
+
+// 🔐 BLOCK ACCESS
+if (user !== "Z1ngoGD" || pass !== "1234") {
+  alert("ACCESS DENIED");
+  location.href = "/";
+}
+
+// 📥 LOAD APPLICATIONS
+async function loadApps() {
+  const res = await fetch("/applications", {
+    headers: {
+      "admin-user": user,
+      "admin-pass": pass
+    }
+  });
+
+  const data = await res.json();
+
+  ["pvp","builder","banker"].forEach(id => {
+    document.getElementById(id).innerHTML = "";
+  });
+
+  data.forEach(app => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>👤 ${app.username}</h3>
+      <p>📧 ${app.email}</p>
+      <p>🧠 ${app.reason}</p>
+      <p>📊 Status: ${app.status}</p>
+      <p>🎖 Rank: ${app.rank}</p>
+
+      <input id="rank-${app.id}" placeholder="Assign Rank">
+
+      <button onclick="update('${app.id}','accepted')">✅ Accept</button>
+      <button onclick="update('${app.id}','denied')">❌ Deny</button>
+    `;
+
+    document.getElementById(app.division).appendChild(card);
+  });
+}
+
+// 🔄 UPDATE
+async function update(id, status) {
+  const rank = document.getElementById("rank-" + id).value;
+
+  await fetch("/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "admin-user": user,
+      "admin-pass": pass
+    },
+    body: JSON.stringify({ id, status, rank })
+  });
+
+  loadApps();
+}
+
+loadApps();
+</script>
+
+</body>
+</html>

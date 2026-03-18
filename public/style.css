@@ -1,14 +1,35 @@
-body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  background: url("https://i.imgur.com/9QZ6bQF.png");
-  animation: moveStars 60s linear infinite;
-  opacity: 0.2;
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b0f2a; /* clean dark */
+  color: white;
 }
 
-@keyframes moveStars {
-  from { transform: translate(0,0); }
-  to { transform: translate(-500px, -500px); }
+header {
+  font-size: 30px;
+  text-align: center;
+  padding: 20px;
+}
+
+.banner {
+  height: 120px;
+  background: linear-gradient(to right, #0b0f2a, #111);
+}
+
+.container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+input, textarea, select, button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 250px;
+}
+
+button {
+  background: cyan;
+  border: none;
+  cursor: pointer;
 }

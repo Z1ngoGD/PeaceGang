@@ -1,34 +1,20 @@
-if (user !== "Z1ngoGD") {
-  alert("ACCESS DENIED");
-  location.href = "/";
-}
 <!DOCTYPE html>
 <html>
 <head>
-  <title>👑 Admin Panel</title>
+  <title>Admin</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1 style="text-align:center;">👑 Peace Gang Galaxy Control</h1>
-
-<h2>⚔️ PvP Army</h2>
-<div id="pvp"></div>
-
-<h2>🏗️ Builders</h2>
-<div id="builder"></div>
-
-<h2>💰 Bankers</h2>
-<div id="banker"></div>
+<h1>👑 Admin Panel</h1>
+<div id="apps"></div>
 
 <script>
 const user = localStorage.getItem("adminUser");
 const pass = localStorage.getItem("adminPass");
 
-if (!user || !pass) {
-  location.href = "/login.html";
-}
+if (!user || !pass) location.href = "/login.html";
 
 async function loadApps() {
   const res = await fetch("/applications", {
@@ -38,28 +24,38 @@ async function loadApps() {
     }
   });
 
-  const data = await res.json();
+  if (res.status !== 200) {
+    alert("Not authorized");
+    location.href = "/login.html";
+    return;
+  }
 
-  ["pvp","builder","banker"].forEach(id => {
-    document.getElementById(id).innerHTML = "";
-  });
+  const data = await res.json();
+  document.getElementById("apps").innerHTML = "";
 
   data.forEach(app => {
-    const card = document.createElement("div");
+    const div = document.createElement("div");
 
-    card.innerHTML = `
-      <h3>👤 ${app.username}</h3>
-      <p>📧 ${app.email}</p>
-      <p>🧠 ${app.reason}</p>
-      <p>📊 Status: ${app.status}</p>
+    div.innerHTML = `
+      <h3>${app.username}</h3>
+      <p>${app.email}</p>
+      <p>${app.reason}</p>
+      <p>Status: ${app.status}</p>
 
-      <input id="rank-${app.id}" placeholder="🎖 Assign Rank">
+      <select id="rank-${app.id}">
+        <option>🪖 Recruit</option>
+        <option>🔰 Associate</option>
+        <option>💎 Diamond</option>
+        <option>🔮 Crystal</option>
+        <option>👑 Mastermind</option>
+      </select>
 
       <button onclick="update('${app.id}','accepted')">✅ Accept</button>
       <button onclick="update('${app.id}','denied')">❌ Deny</button>
+      <hr>
     `;
 
-    document.getElementById(app.division).appendChild(card);
+    document.getElementById("apps").appendChild(div);
   });
 }
 
@@ -83,5 +79,4 @@ loadApps();
 </script>
 
 </body>
-</html>
 </html>
