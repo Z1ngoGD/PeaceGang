@@ -9,7 +9,7 @@ app.use(express.static("public"));
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "yourgmail@gmail.com",
+    user: "z1ng0gd@gmail.com",
     pass: "your_app_password"
   }
 });
@@ -18,8 +18,9 @@ app.post("/apply", (req, res) => {
   const { username, reason, email, division, rank } = req.body;
 
   const mailOptions = {
-    from: email,
-    to: ["yourgmail@gmail.com"],
+    from: "yourgmail@gmail.com",
+    replyTo: email,
+    to: ["z1ng0gd@gmail.com"],
     subject: "Peace Gang Application",
     text: `
 Username: ${username}
@@ -31,9 +32,13 @@ Email: ${email}
   };
 
   transporter.sendMail(mailOptions, (err) => {
-    if (err) return res.send("Error sending");
-    res.send("Application Sent!");
+    if (err) return res.send("Error ❌");
+    res.send("Application Sent ✅");
   });
 });
 
-app.listen(3000, () => console.log("Running on port 3000"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});
