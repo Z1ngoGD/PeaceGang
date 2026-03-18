@@ -1,39 +1,14 @@
-body {
-  background: linear-gradient(to bottom, #0a0f1f, black);
-  color: #00c3ff;
-  text-align: center;
-  font-family: Arial;
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: url("https://i.imgur.com/9QZ6bQF.png");
+  animation: moveStars 60s linear infinite;
+  opacity: 0.2;
 }
 
-header {
-  font-size: 40px;
-  padding: 30px;
+@keyframes moveStars {
+  from { transform: translate(0,0); }
+  to { transform: translate(-500px, -500px); }
 }
-
-.banner {
-  height: 200px;
-  background: url('banner.jpg') center/cover;
-}
-
-.container {
-  width: 300px;
-  margin: auto;
-  background: #0d1326;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-input, textarea, select {
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  background: #1a1f3a;
-  color: #00c3ff;
-  border: none;
-}
-
-button {
-  padding: 10px;
-  background: #00c3ff;
-  border: none;
-} 
