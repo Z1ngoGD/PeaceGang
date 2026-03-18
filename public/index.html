@@ -2,10 +2,7 @@
 <html>
 <head>
   <title>Peace Gang</title>
-
-  <!-- ✅ PUT IT HERE -->
   <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 
@@ -20,21 +17,25 @@
 <textarea name="reason" placeholder="Why should we trust you?" required></textarea>
 <input type="email" name="email" placeholder="Your Email" required>
 
-<select name="division">
-<option>PvP</option>
-<option>Builder</option>
-<option>Banker</option>
-</select>
-
 <select name="rank">
-<option>Recruit</option>
-<option>Associate</option>
-<option>Diamond</option>
+
+  <!-- ⚔️ PvP Army -->
+  <option value="Recruit">🪖 Recruit</option>
+  <option value="Associate">🔰 Associate</option>
+  <option value="Diamond">💎 Diamond</option>
+  <option value="Crystal">🔮 Crystal</option>
+  <option value="Mastermind">👑 Mastermind</option>
+
+  <!-- 🏗️ Builders -->
+  <option value="Apprentice Builder">🧱 Apprentice Builder</option>
+  <option value="Builder">🏗️ Builder</option>
+  <option value="Architect">📐 Architect</option>
+  <option value="Chief Architect">👷‍♂️ Chief Architect</option>
+
+  <!-- 💰 Bankers -->
+  <option value="Trainee Banker">💵 Trainee Banker</option>
+  <option value="Banker">💰 Banker</option>
+  <option value="Treasurer">🏦 Treasurer</option>
+  <option value="Financial Master">👑 Financial Master</option>
+
 </select>
-
-<button>Apply</button>
-</form>
-</div>
-
-</body>
-</html>
