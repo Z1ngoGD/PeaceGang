@@ -1,14 +1,13 @@
 {
-  "name": "peacegang",
+  "name": "peace-gang",
   "version": "1.0.0",
-  "description": "Peace Gang Website",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "express": "^4.18.2",
     "nodemailer": "^6.9.8"
