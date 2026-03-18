@@ -1,0 +1,87 @@
+if (user !== "Z1ngoGD") {
+  alert("ACCESS DENIED");
+  location.href = "/";
+}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>👑 Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1 style="text-align:center;">👑 Peace Gang Galaxy Control</h1>
+
+<h2>⚔️ PvP Army</h2>
+<div id="pvp"></div>
+
+<h2>🏗️ Builders</h2>
+<div id="builder"></div>
+
+<h2>💰 Bankers</h2>
+<div id="banker"></div>
+
+<script>
+const user = localStorage.getItem("adminUser");
+const pass = localStorage.getItem("adminPass");
+
+if (!user || !pass) {
+  location.href = "/login.html";
+}
+
+async function loadApps() {
+  const res = await fetch("/applications", {
+    headers: {
+      "admin-user": user,
+      "admin-pass": pass
+    }
+  });
+
+  const data = await res.json();
+
+  ["pvp","builder","banker"].forEach(id => {
+    document.getElementById(id).innerHTML = "";
+  });
+
+  data.forEach(app => {
+    const card = document.createElement("div");
+
+    card.innerHTML = `
+      <h3>👤 ${app.username}</h3>
+      <p>📧 ${app.email}</p>
+      <p>🧠 ${app.reason}</p>
+      <p>📊 Status: ${app.status}</p>
+
+      <input id="rank-${app.id}" placeholder="🎖 Assign Rank">
+
+      <button onclick="update('${app.id}','accepted')">✅ Accept</button>
+      <button onclick="update('${app.id}','denied')">❌ Deny</button>
+    `;
+
+    document.getElementById(app.division).appendChild(card);
+  });
+}
+
+async function update(id, status) {
+  const rank = document.getElementById("rank-" + id).value;
+
+  await fetch("/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "admin-user": user,
+      "admin-pass": pass
+    },
+    body: JSON.stringify({ id, status, rank })
+  });
+
+  loadApps();
+}
+
+loadApps();
+</script>
+
+</body>
+</html>
+</html>

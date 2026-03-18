@@ -1,0 +1,39 @@
+body {
+  background: linear-gradient(to bottom, #0a0f1f, black);
+  color: #00c3ff;
+  text-align: center;
+  font-family: Arial;
+}
+
+header {
+  font-size: 40px;
+  padding: 30px;
+}
+
+.banner {
+  height: 200px;
+  background: url('banner.jpg') center/cover;
+}
+
+.container {
+  width: 300px;
+  margin: auto;
+  background: #0d1326;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, textarea, select {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background: #1a1f3a;
+  color: #00c3ff;
+  border: none;
+}
+
+button {
+  padding: 10px;
+  background: #00c3ff;
+  border: none;
+} 
